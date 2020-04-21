@@ -41,7 +41,8 @@ def backwarp(tenInput, tenFlow):
 		tenHorizontal = torch.linspace(-1.0, 1.0, tenFlow.shape[3]).view(1, 1, 1, tenFlow.shape[3]).expand(tenFlow.shape[0], -1, tenFlow.shape[2], -1)
 		tenVertical = torch.linspace(-1.0, 1.0, tenFlow.shape[2]).view(1, 1, tenFlow.shape[2], 1).expand(tenFlow.shape[0], -1, -1, tenFlow.shape[3])
 
-		backwarp_tenGrid[str(tenFlow.size())] = torch.cat([ tenHorizontal, tenVertical ], 1).cuda()
+		backwarp_tenGrid[str(tenFlow.size())] = torch.cat([ tenHorizontal, tenVertical ], 1)
+		# backwarp_tenGrid[str(tenFlow.size())] = torch.cat([ tenHorizontal, tenVertical ], 1).cuda()
 	# end
 
 	tenFlow = torch.cat([ tenFlow[:, 0:1, :, :] / ((tenInput.shape[3] - 1.0) / 2.0), tenFlow[:, 1:2, :, :] / ((tenInput.shape[2] - 1.0) / 2.0) ], 1)
@@ -95,7 +96,7 @@ class Network(torch.nn.Module):
 
 		self.netBasic = torch.nn.ModuleList([ Basic(intLevel) for intLevel in range(6) ])
 
-		self.load_state_dict({ strKey.replace('module', 'net'): tenWeight for strKey, tenWeight in torch.load(__file__.replace('run.py', 'network-' + arguments_strModel + '.pytorch')).items() })
+		self.load_state_dict({ strKey.replace('module', 'net'): tenWeight for strKey, tenWeight in torch.load(__file__.replace('spynet.py', 'network-' + arguments_strModel + '.pytorch')).items() })
 	# end
 
 	def forward(self, tenFirst, tenSecond):
@@ -134,7 +135,8 @@ def estimate(tenFirst, tenSecond):
 	global netNetwork
 
 	if netNetwork is None:
-		netNetwork = Network().cuda().eval()
+		netNetwork = Network().eval()
+		# netNetwork = Network().cuda().eval()
 	# end
 
 	assert(tenFirst.shape[1] == tenSecond.shape[1])
@@ -143,8 +145,10 @@ def estimate(tenFirst, tenSecond):
 	intWidth = tenFirst.shape[2]
 	intHeight = tenFirst.shape[1]
 
-	tenPreprocessedFirst = tenFirst.cuda().view(1, 3, intHeight, intWidth)
-	tenPreprocessedSecond = tenSecond.cuda().view(1, 3, intHeight, intWidth)
+	tenPreprocessedFirst = tenFirst.view(1, 3, intHeight, intWidth)
+	# tenPreprocessedFirst = tenFirst.cuda().view(1, 3, intHeight, intWidth)
+	tenPreprocessedSecond = tenSecond.view(1, 3, intHeight, intWidth)
+	# tenPreprocessedSecond = tenSecond.cuda().view(1, 3, intHeight, intWidth)
 
 	intPreprocessedWidth = int(math.floor(math.ceil(intWidth / 32.0) * 32.0))
 	intPreprocessedHeight = int(math.floor(math.ceil(intHeight / 32.0) * 32.0))

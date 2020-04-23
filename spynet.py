@@ -25,12 +25,15 @@ arguments_strFirst = './images/first.png'
 arguments_strSecond = './images/second.png'
 arguments_strOut = './out.flo'
 
+# FIXME This section causes errors when spynet is invoked as a submodule.
+'''
 for strOption, strArgument in getopt.getopt(sys.argv[1:], '', [ strParameter[2:] + '=' for strParameter in sys.argv[1::2] ])[0]:
 	if strOption == '--model' and strArgument != '': arguments_strModel = strArgument # which model to use, see below
 	if strOption == '--first' and strArgument != '': arguments_strFirst = strArgument # path to the first frame
 	if strOption == '--second' and strArgument != '': arguments_strSecond = strArgument # path to the second frame
 	if strOption == '--out' and strArgument != '': arguments_strOut = strArgument # path to where the output should be stored
 # end
+'''
 
 ##########################################################
 

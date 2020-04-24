@@ -18,7 +18,11 @@ torch.backends.cudnn.enabled = False # make sure to use cudnn if possible for co
 
 ##########################################################
 
-arguments_strModel = 'sintel-final'
+#arguments_strModel = 'sintel-final' # poor quality
+#arguments_strModel = 'sintel-clean' # decent quality, and fast
+#arguments_strModel = 'kitti-final' # decent quality, but slow
+#arguments_strModel = 'chairs-final' # high quality
+arguments_strModel = 'chairs-clean' # best quality and speed
 arguments_strFirst = './images/first.png'
 arguments_strSecond = './images/second.png'
 arguments_strOut = './out.flo'
